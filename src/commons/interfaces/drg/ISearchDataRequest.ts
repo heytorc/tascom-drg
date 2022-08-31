@@ -1,4 +1,4 @@
-export interface IRequestSearchDataParams {
+export interface ISearchDataRequest {
   dataUltimaAlteracao?: string,
   ids?: number[],
   numeroAtendimento?: string[],

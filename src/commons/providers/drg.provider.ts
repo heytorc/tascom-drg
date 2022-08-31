@@ -1,6 +1,6 @@
 import { auth, api } from "@/commons/services/drg";
 
-import { IRequestSearchDataParams } from "@/commons/interfaces/drg/IRequestSearchDataParams";
+import { ISearchDataRequest } from "@/commons/interfaces/drg/ISearchDataRequest";
 
 const generateToken = async () => {
   try {
@@ -19,7 +19,7 @@ const generateToken = async () => {
   }
 };
 
-const handleSearchData = async (params: IRequestSearchDataParams) => {
+const handleSearchData = async (params: ISearchDataRequest) => {
   try {
     const token = await generateToken();
   
