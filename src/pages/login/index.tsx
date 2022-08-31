@@ -63,13 +63,13 @@ export default function Login() {
         >
           <form onSubmit={handleSubmit(handleLogin)}>
             <Stack spacing={4}>
-              <FormControl>
+              <FormControl isInvalid={!!errors.username?.type}>
                 <FormLabel>Usuário</FormLabel>
                 <Input
                    {...register("username", { required: true })}
                 />
               </FormControl>
-              <FormControl>
+              <FormControl isInvalid={!!errors.password?.type}>
                 <FormLabel>Senha</FormLabel>
                 <Input
                   type="password"

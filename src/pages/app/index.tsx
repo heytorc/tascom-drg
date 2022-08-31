@@ -1,27 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import {
+  Container,
+  Stack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Tr
+} from '@chakra-ui/react';
 
-import { handleSearchData } from '@/commons/providers/drg.provider';
+import { useDrg } from '@/commons/contexts/drg.context';
+
+import dayjs from '@/commons/utils/date.utils';
+
+import DrgFilter from '@/components/forms/drg.filter.component';
 
 const App: React.FC = () => {
-  const [data, setData] = useState<any[]>([])
-
-  useEffect(() => {
-    handleData();
-  }, [])
-
-  const handleData = async () => {
-    const searchData = await handleSearchData({
-      dataAltaInicial: '2022-08-30',
-      dataAltaFinal: '2022-08-30',
-      page: 0
-    });
-
-    // setData(searchData);
-  };
+  const { data } = useDrg()
 
   return (
-    <div>
-    </div>
+    <Container maxWidth={"container.lg"}>
+      <Stack>
+        <DrgFilter />
+      </Stack>
+      <TableContainer>
+        <Table variant='simple'>
+          <Thead>
+            <Tr>
+              <Th>To convert</Th>
+              <Th>into</Th>
+              <Th isNumeric>multiply by</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data.map((item, key) => (
+              <Tr key={`drg_${key}`}>
+                <Td>{item.numeroAtendimento}</Td>
+                <Td>{item.numeroRegistro}</Td>
+                <Td>{dayjs(item.dataAlta).format('DD/MM/YYYY HH:mm:ss')}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+          <Tfoot>
+            <Tr>
+              <Th>To convert</Th>
+              <Th>into</Th>
+              <Th isNumeric>multiply by</Th>
+            </Tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 }
 
