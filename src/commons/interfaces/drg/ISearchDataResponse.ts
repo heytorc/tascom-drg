@@ -12,7 +12,7 @@ interface IHospital {
 interface IBeneficiario {
   codigoPaciente: string,
   plano: string,
-  dataNascimento: Date,
+  dataNascimento: string,
   sexo: "M" | "F" | "I",
   recemNascido: "S" | "N",
   particular: "S" | "N",
@@ -47,17 +47,17 @@ interface IProcedimento {
   codigo: string,
   nome: string,
   porte: string,
-  dataAutorizacao: Date,
-  dataSolicitacao: Date,
-  dataExecucao: Date,
-  dataExecucaoFinal: Date,
+  dataAutorizacao: string,
+  dataSolicitacao: string,
+  dataExecucao: string,
+  dataExecucaoFinal: string,
   medico: IMedico[]
   tipoAtuacaoProcedimento: "A" | "A2" | "A3" | "R"
 }
 
 interface ICTI {
-  dataInicial: Date,
-  dataFinal: Date,
+  dataInicial: string,
+  dataFinal: string,
   condicaoAlta: string,
   tipo: string,
   permanenciaPrevistaNaAlta: number,
@@ -108,8 +108,8 @@ interface IRn {
 interface ICondicaoAdquirida {
   codigo: string,
   descricao: string,
-  dataOcorrencia: Date,
-  dataManifestacao: Date,
+  dataOcorrencia: string,
+  dataManifestacao: string,
   Medico: IMedico,
   grave: 'S' | 'N',
 }
@@ -117,13 +117,13 @@ interface ICondicaoAdquirida {
 interface IAltaAdministrativa {
   numeroAtendimento: string,
   numeroAutorizacao: string,
-  dataAutorizacao: Date,
-  dataAtendimentoInicial: Date,
-  dataAtendimentoFinal: Date
+  dataAutorizacao: string,
+  dataAtendimentoInicial: string,
+  dataAtendimentoFinal: string
 }
 
 interface IAnaliseCritica {
-  dataAnalise: Date,
+  dataAnalise: string,
   analiseCritica: string,
 }
 
@@ -131,35 +131,35 @@ interface ISuporteVentilatorio {
   tipo: string,
   tipoInvasivo: string,
   local: string,
-  dataInicial: Date,
-  dataFinal: Date,
+  dataInicial: string,
+  dataFinal: string,
   condicaoAdquiridaSuporteVentilatorio: any,
 }
 
 interface ISondaVesicalDeDemora {
   local: string,
-  dataInicial: Date,
-  dataFinal: Date,
+  dataInicial: string,
+  dataFinal: string,
   condicaoAdquiridaSondaVesicalDeDemora: ICondicaoAdquiridaSondaVesicalDeDemora
 }
 
 interface ICondicaoAdquiridaSondaVesicalDeDemora {
   codigo: string,
   descricao: string,
-  dataOcorrencia: Date,
+  dataOcorrencia: string,
 }
 
 interface ICateterVascularCentral {
   local: string,
   dataInicial: string,
-  dataFinal: Date,
+  dataFinal: string,
   condicaoAdquiridaCateterVascularCentral: ICondicaoAdquiridaCateterVascularCentral,
 }
 
 interface ICondicaoAdquiridaCateterVascularCentral {
   codigo: string,
   descricao: string,
-  dataOcorrencia: Date,
+  dataOcorrencia: string,
 }
 
 interface IPartoAdequado {
@@ -174,8 +174,8 @@ interface IDrgAdmissional {
 interface ICausaExterna {
   descricao: string,
   tempo: string,
-  dataInicial: Date,
-  dataFinal: Date,
+  dataInicial: string,
+  dataFinal: string,
 }
 
 interface IVariaveis {
@@ -184,7 +184,7 @@ interface IVariaveis {
   gerenciavelEmergencia: "S" | "N"
 }
 
-export interface ISearchDataResponse {
+export interface DataItem {
   id: number,
   situacao: "1" | "2" | "3" | "4",
   caraterInternacao: "1" | "2" | "3" | "4" | "9",
@@ -192,8 +192,8 @@ export interface ISearchDataResponse {
   numeroRegistro: string,
   numeroAtendimento: string,
   numeroAutorizacao: string,
-  dataInternacao: Date,
-  dataAlta: Date,
+  dataInternacao: string,
+  dataAlta: string,
   condicaoAlta: "A" | "I" | "D" | "P" | "C" | "L" | "O" | "E",
   dataAutorizacao: string,
   internadoOutrasVezes: "S" | "N",
@@ -203,7 +203,7 @@ export interface ISearchDataResponse {
   origemReadmissao30Dias: "S" | "N" | "Não completou prazo de 30 dias",
   origemRecaida30Dias: "S" | "N" | "Não completou prazo de 30 dias",
   idInternacaoRecaida: number,
-  dataPrevistaAlta: Date,
+  dataPrevistaAlta: string,
   permanenciaPrevistaNaInternacao: number,
   permanenciaPrevistaNaAlta: number,
   permanenciaReal: number,
@@ -212,15 +212,15 @@ export interface ISearchDataResponse {
   ventilacaoMecanica: "S" | "N",
   totalHorasVentilacaoMecanica: "A" | "B",
   modalidadeInternacao: "H" | "D",
-  dataCadastro: Date,
+  dataCadastro: string,
   usuarioCadastro: string,
-  dataCadastroAlta: Date,
+  dataCadastroAlta: string,
   usuarioCadastroAlta: string,
-  dataUltimaAlteracao: Date,
+  dataUltimaAlteracao: string,
   usuarioUltimaAlteracao: string,
   correcaoRegistro: "S" | "N",
   usuarioCorrecao: string,
-  dataUltimoRecalculo: Date,
+  dataUltimoRecalculo: string,
   leito: string,
   condicaoAdquiridaGrave: "S" | "N",
   registroPacienteMae: number,
@@ -248,4 +248,9 @@ export interface ISearchDataResponse {
   drgAdmissional: IDrgAdmissional,
   causaExterna: ICausaExterna[],
   variaveis: IVariaveis
+}
+
+export interface ISearchDataResponse {
+  total: number,
+  items: DataItem[]
 }
