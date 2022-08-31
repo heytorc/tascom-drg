@@ -1,6 +1,7 @@
 import { auth, api } from "@/commons/services/drg";
 
 import { ISearchDataRequest } from "@/commons/interfaces/drg/ISearchDataRequest";
+import { ISearchDataResponse } from "@/commons/interfaces/drg/ISearchDataResponse";
 
 const generateToken = async () => {
   try {
@@ -23,7 +24,7 @@ const handleSearchData = async (params: ISearchDataRequest) => {
   try {
     const token = await generateToken();
   
-    const { data } = await api.post(
+    const { data } : { data: ISearchDataResponse } = await api.post(
       '/search',
       params,
       { headers: { Authorization: `Bearer ${token}` } }
