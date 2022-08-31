@@ -23,7 +23,11 @@ const handleSearchData = async (params: IRequestSearchDataParams) => {
   try {
     const token = await generateToken();
   
-    const { data } = await api.post('/search', params, { headers: { authorization: `Bearer ${token}` } });
+    const { data } = await api.post(
+      '/search',
+      params,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
     return data;
   } catch (error: any) {

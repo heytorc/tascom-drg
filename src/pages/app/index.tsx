@@ -10,9 +10,13 @@ const App: React.FC = () => {
   }, [])
 
   const handleData = async () => {
-    const searchData = await handleSearchData({});
+    const searchData = await handleSearchData({
+      dataAltaInicial: '2022-08-30',
+      dataAltaFinal: '2022-08-30',
+      page: 0
+    });
 
-    setData(searchData);
+    // setData(searchData);
   };
 
   return (
