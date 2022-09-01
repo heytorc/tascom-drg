@@ -24,6 +24,7 @@ import {
 
 import { DataItem } from '@/commons/interfaces/drg/ISearchDataResponse';
 import { jsonToTable } from '@/commons/utils/text.utils';
+import { generateExcel, normalizeJsonToExcel } from '@/commons/providers/formatter.provider';
 
 interface ITableProps {
   data: DataItem[],
@@ -81,6 +82,14 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
     columnsCopy = columnsCopy.map(item => ({ ...item, selected: type === "check" }));
 
     setColumns(columnsCopy);
+  }
+
+  const handleGenerateExcel = async () => {
+    if (data.length > 0) {
+      const translatedData = normalizeJsonToExcel(data);
+
+      await generateExcel(translatedData);
+    }
   }
 
   return (
@@ -164,6 +173,7 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
           <Stack>
             <Button
               colorScheme="green"
+              onClick={handleGenerateExcel}
             >
               Gerar Planilha
             </Button>
