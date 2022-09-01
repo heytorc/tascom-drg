@@ -8,6 +8,7 @@ import { handleSearchData } from "@/commons/providers/drg.provider";
 
 interface IDrgContext {
   data: DataItem[],
+  total: number,
   searchData: (params: IFormFilterProps) => void
 }
 
@@ -15,18 +16,15 @@ export const DrgContext = createContext({} as IDrgContext);
 
 export const DrgProvider: FC<any> = ({ children }) => {
   const [data, setData] = useState<DataItem[]>([]);
+  const [total, setTotal] = useState<number>(0);
 
   const searchData = async (params: IFormFilterProps) => {
     const requestParams: ISearchDataRequest = {
       page: params.page || 0
     };
 
-    debugger;
-
     let initialDate = params.initialDate.split('/').reverse().join('-');
     let finalDate = params.finalDate.split('/').reverse().join('-');
-
-    debugger;
 
     switch (params.dateType) {
       case 'Alta':
@@ -51,12 +49,14 @@ export const DrgProvider: FC<any> = ({ children }) => {
 
     const searchData = await handleSearchData(requestParams);
 
+    setTotal(searchData.total);
     setData(searchData.items);
   }
 
   return (
     <DrgContext.Provider value={{
       data,
+      total,
       searchData
     }}>
       {children}

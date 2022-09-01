@@ -9,23 +9,28 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.9",
     "@chakra-ui/react": "^2.3.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "axios": "^0.27.2",
     "dayjs": "^1.11.5",
     "framer-motion": "^6",
+    "json-to-table": "^4.2.1",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.34.2",
     "react-input-mask": "^2.0.4",
-    "react-router-dom": "6"
+    "react-router-dom": "6",
+    "traverse": "^0.6.6"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/react-input-mask": "^3.0.1",
+    "@types/traverse": "^0.6.32",
     "@vitejs/plugin-react": "^2.0.1",
     "typescript": "^4.6.4",
     "vite": "^3.0.7",
