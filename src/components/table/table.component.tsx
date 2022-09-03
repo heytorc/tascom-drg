@@ -1,13 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash'
 import {
-  TableContainer,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Tfoot,
   FormLabel,
   Stack,
   Checkbox,
@@ -17,7 +10,6 @@ import {
   Alert,
   AlertDescription,
   AlertIcon,
-  AlertTitle,
   Heading,
   Button
 } from '@chakra-ui/react';
@@ -86,7 +78,26 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
 
   const handleGenerateExcel = async () => {
     if (data.length > 0) {
-      const translatedData = normalizeJsonToExcel(data);
+      const dataFiltredColumns: DataItem[] = [];
+      const columnUnselected: string[] = [];
+
+      columns.forEach((col) => {
+        if (!col.selected) columnUnselected.push(col.name);
+      });
+
+      const dataCopy = _.cloneDeep(data);
+
+      dataCopy.forEach((item, index) => {
+        let key: keyof DataItem;
+
+        for (key in item) {
+          if (columnUnselected.includes(key)) delete item[key];
+        }
+
+        dataFiltredColumns.push(item);
+      });
+      
+      const translatedData = normalizeJsonToExcel(dataFiltredColumns);
 
       await generateExcel(translatedData);
     }
