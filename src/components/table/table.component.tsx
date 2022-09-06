@@ -17,6 +17,7 @@ import {
 import { DataItem } from '@/commons/interfaces/drg/ISearchDataResponse';
 import { jsonToTable } from '@/commons/utils/text.utils';
 import { generateExcel, normalizeJsonToExcel } from '@/commons/providers/formatter.provider';
+import useLocalStorage from '@/commons/hooks/useLocalStorage';
 
 interface ITableProps {
   data: DataItem[],
@@ -32,6 +33,10 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
   const [theaders, setTheaders] = useState<string[]>([]);
   const [patientData, setPatientData] = useState<any[]>([]);
   const [columns, setColumns] = useState<IColumns[]>([]);
+  const [columnsStoraged, setColumnsStoraged] = useLocalStorage<string>(
+    "columns",
+    window.localStorage.getItem('columns') || ''
+  );
 
   const [searchColumn, setSearchColumn] = useState<string>('');
 
@@ -56,20 +61,34 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
 
       setTheaders(theadersData)
       setPatientData(tdata);
-      setColumns(theadersData.map(item => ({ name: item, selected: true })));
+
+      setColumns(theadersData.map(item => {
+        let selected = true;
+
+        if (columnsStoraged.length > 0) {
+          const columnsStoragedArray = columnsStoraged.split(",");
+          selected = columnsStoragedArray.includes(item)
+        }
+
+
+        return { name: item, selected }
+      }));
     }
   }, [data])
 
   const handleCheckColumn = (key: number) => {
-    const columnsCopy = [...columns];
+    const columnsCopy = _.cloneDeep(columns);
 
     columnsCopy[key].selected = !columnsCopy[key].selected;
 
+    const columnsSelecteds = columnsCopy.filter(item => item.selected).map(item => item.name).toString();
+
+    setColumnsStoraged(columnsSelecteds);
     setColumns(columnsCopy);
   }
 
   const handleToggleCheckAllColumns = (type: "check" | "uncheck") => {
-    let columnsCopy = [...columns];
+    let columnsCopy = _.cloneDeep(columns);
 
     columnsCopy = columnsCopy.map(item => ({ ...item, selected: type === "check" }));
 
@@ -96,7 +115,7 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
 
         dataFiltredColumns.push(item);
       });
-      
+
       const translatedData = normalizeJsonToExcel(dataFiltredColumns);
 
       await generateExcel(translatedData);
