@@ -37,17 +37,12 @@ interface ITokenData {
   exp: number
 }
 
-interface IValidateToken {
-  isValid: ITokenData | null;
-}
-
 interface IAuthContext {
   user?: IUser;
   setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>,
   error: IAuthError;
   signIn: (data: IUserLoginRequest) => Promise<void>;
   logOff: () => void;
-  validateToken: (token: string | null) => Promise<false | ITokenData | null | undefined>;
   findUserById: (id: string) => Promise<any>;
 }
 
@@ -60,7 +55,7 @@ export const AuthProvider: FC<any> = ({ children }) => {
 
   const userLogged: IUser | undefined = userStoraged.length > 0 ? JSON.parse(userStoraged) : undefined;
 
-  const [cookie, setCookie, removeCookie] = useCookies(['app.tascomeditor.token', 'app.tascomeditor.user'])
+  const [cookie, setCookie, removeCookie] = useCookies(['app.tascomdrg.token', 'app.tascomdrg.user'])
 
   const [user, setUser] = useState<IUser | undefined>(userLogged);
   const [error, setError] = useState({ message: null });
@@ -70,14 +65,7 @@ export const AuthProvider: FC<any> = ({ children }) => {
       setError({ message: null });
 
       // const { data: { access_token, ...userAuthenticaded } } = await api.get<IUserLoginResponse>('/auth');
-      const { data: { access_token, ...userAuthenticaded } } = await api.post<IUserLoginResponse>(`/auth/login`, userData);
-
-      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-
-      setCookie('app.tascomeditor.token', access_token, {
-        maxAge: 60 * 60 * 1, // 1 hora
-        path: '/app',
-      });
+      const { data: userAuthenticaded } = await api.post<IUserLoginResponse>(`/auth/login`, userData);
 
       setUserStoraged(JSON.stringify(userAuthenticaded));
 
@@ -93,35 +81,11 @@ export const AuthProvider: FC<any> = ({ children }) => {
   };
 
   const logOff = () => {
-    removeCookie('app.tascomeditor.token');
+    removeCookie('app.tascomdrg.token');
     setUserStoraged("");
     localStorage.removeItem('currentPage');
 
     navigate('/');
-  };
-
-  const validateToken = async (token: string | null) => {
-    if (!token) return false;
-
-    try {
-      const { data: { isValid } } = await api.get<IValidateToken>(`/auth/validate-token?token=${token}`);
-
-      if (isValid) {
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        await findUserById(isValid.sub);
-        
-        setCookie('app.tascomeditor.token', token, {
-          maxAge: 60 * 60 * 1, // 1 hora
-          path: '/app',
-        });
-      };
-
-      return isValid;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
   };
 
   const findUserById = async (id: string) => {
@@ -146,7 +110,6 @@ export const AuthProvider: FC<any> = ({ children }) => {
       error,
       signIn,
       logOff,
-      validateToken,
       findUserById
     }}>
       {children}

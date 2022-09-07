@@ -14,8 +14,6 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-
 import { useAuth } from '@/commons/contexts/auth.context';
 
 interface IFormInput {
@@ -26,19 +24,16 @@ interface IFormInput {
 export default function Login() {
   const { register, handleSubmit, watch, formState: { errors, isSubmitting }, setError } = useForm<IFormInput>();
   const { signIn, error } = useAuth();
-  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => console.log('errors', errors), [errors]);
 
-  const handleLogin: SubmitHandler<IFormInput> = (data) => {
-    console.log('errors', errors);
-    console.log('data', data);
+  const handleLogin: SubmitHandler<IFormInput> = async (data) => {
     // if (data.username === 'admin') setError('username', { message: 'username is invalid', type: 'validate' })
     
-    navigate('/app')
-    //  await signIn(data);
+    await signIn(data);
+    // navigate('/app')
   };
 
   return (
