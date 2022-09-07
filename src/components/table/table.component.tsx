@@ -19,6 +19,7 @@ import { jsonToTable } from '@/commons/utils/text.utils';
 import { generateExcel, normalizeJsonToExcel } from '@/commons/providers/formatter.provider';
 import useLocalStorage from '@/commons/hooks/useLocalStorage';
 import { useDrg } from '@/commons/contexts/drg.context';
+import { useAuth } from '@/commons/contexts/auth.context';
 
 interface ITableProps {
   data: DataItem[],
@@ -31,6 +32,7 @@ interface IColumns {
 }
 
 const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
+  const { user } = useAuth();
   const { filter } = useDrg();
 
   const [theaders, setTheaders] = useState<string[]>([]);
@@ -120,10 +122,11 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
       });
 
       if (!filter) return;
+      if (!user) return;
 
       const translatedData = normalizeJsonToExcel(dataFiltredColumns);
 
-      await generateExcel(translatedData, filter);
+      await generateExcel(translatedData, filter, user);
     }
   }
 

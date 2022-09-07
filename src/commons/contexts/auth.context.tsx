@@ -7,8 +7,8 @@ import api from "@/commons/services/api";
 import IUserLoginResponse from '@/commons/interfaces/user/IUserLoginResponse';
 import useLocalStorage from "@/commons/hooks/useLocalStorage";
 
-interface IUser {
-  _id?: string;
+export interface IUser {
+  id?: number;
   name?: string;
   username?: string;
   password?: string;

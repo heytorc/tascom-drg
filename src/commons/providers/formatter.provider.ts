@@ -1,15 +1,22 @@
 import api from "@/commons/services/api";
+import { IUser } from "@/commons/contexts/auth.context";
 import { IFormFilterProps } from "../interfaces/drg/IFormFilterProps";
 
 interface IGenerateProps extends IFormFilterProps {
   total: number,
-  data: any[]
+  data: any[],
+  created_by: number
 }
 
-const generateExcel = async (data: any[], filter: IFormFilterProps) => {
+
+
+const generateExcel = async (data: any[], filter: IFormFilterProps, user: IUser) => {
+  if (!user?.id) return;
+
   await api.post<any, any, IGenerateProps>('/report/create', {
     ...filter,
     data,
+    created_by: user.id,
     total: data.length
   });
 
