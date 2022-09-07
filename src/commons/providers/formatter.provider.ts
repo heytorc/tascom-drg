@@ -1,6 +1,18 @@
 import api from "@/commons/services/api";
+import { IFormFilterProps } from "../interfaces/drg/IFormFilterProps";
 
-const generateExcel = async (data: any[]) => {
+interface IGenerateProps extends IFormFilterProps {
+  total: number,
+  data: any[]
+}
+
+const generateExcel = async (data: any[], filter: IFormFilterProps) => {
+  await api.post<any, any, IGenerateProps>('/report/create', {
+    ...filter,
+    data,
+    total: data.length
+  });
+
   const { data: file } = await api.post('/formatter/export/excel', data, { responseType: 'blob' });
 
   const url = window.URL.createObjectURL(new Blob([file]));

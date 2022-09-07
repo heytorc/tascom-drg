@@ -18,6 +18,7 @@ import { DataItem } from '@/commons/interfaces/drg/ISearchDataResponse';
 import { jsonToTable } from '@/commons/utils/text.utils';
 import { generateExcel, normalizeJsonToExcel } from '@/commons/providers/formatter.provider';
 import useLocalStorage from '@/commons/hooks/useLocalStorage';
+import { useDrg } from '@/commons/contexts/drg.context';
 
 interface ITableProps {
   data: DataItem[],
@@ -30,6 +31,8 @@ interface IColumns {
 }
 
 const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
+  const { filter } = useDrg();
+
   const [theaders, setTheaders] = useState<string[]>([]);
   const [patientData, setPatientData] = useState<any[]>([]);
   const [columns, setColumns] = useState<IColumns[]>([]);
@@ -116,9 +119,11 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
         dataFiltredColumns.push(item);
       });
 
+      if (!filter) return;
+
       const translatedData = normalizeJsonToExcel(dataFiltredColumns);
 
-      await generateExcel(translatedData);
+      await generateExcel(translatedData, filter);
     }
   }
 

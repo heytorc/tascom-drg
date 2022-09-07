@@ -36,10 +36,13 @@ const DrgFilter: React.FC = () => {
 
   const { searchData } = useDrg()
 
-  const [dateType, setDateType] = useState<string>();
+  const [dateType, setDateType] = useState<string>('Alta');
 
   const handleDateType = (value: string | string[]) => {
     if (typeof value === 'string') {
+      value = value as "Alta" | "Internação" | "Cadastro" | "Cadastro da Alta";
+
+      register("dateType", { required: true })
       setDateType(value);
     }
   };
@@ -64,7 +67,8 @@ const DrgFilter: React.FC = () => {
               <Input
                 as={InputMask}
                 mask="99/99/9999"
-                {...register("initialDate", { required: true })}
+                autoFocus
+                {...register("initialDate", { required: true, })}
               />
             </FormControl>
 
@@ -83,14 +87,14 @@ const DrgFilter: React.FC = () => {
                 <MenuButton as={Button} w={'15rem'}>
                   {dateType ?? 'Nenhum tipo selecionado'}
                 </MenuButton>
-                <MenuList>
+                <MenuList defaultValue={'Alta'}>
                   <MenuOptionGroup
                     defaultValue="asc"
                     title="Tipo da data"
                     type="radio"
                     onChange={handleDateType}
                   >
-                    <MenuItemOption isChecked={dateType === "Alta"} value="Alta">Alta</MenuItemOption>
+                    <MenuItemOption isChecked={dateType === "Alta"} value="Alta" defaultChecked>Alta</MenuItemOption>
                     <MenuItemOption isChecked={dateType === "Internação"} value="Internação">Internação</MenuItemOption>
                     <MenuItemOption isChecked={dateType === "Cadastro"} value="Cadastro">Cadastro</MenuItemOption>
                     <MenuItemOption isChecked={dateType === "Cadastro da Alta"} value="Cadastro da Alta">Cadastro da Alta</MenuItemOption>
