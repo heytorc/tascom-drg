@@ -11,7 +11,8 @@ import {
   AlertDescription,
   AlertIcon,
   Heading,
-  Button
+  Button,
+  useDisclosure
 } from '@chakra-ui/react';
 
 import { DataItem } from '@/commons/interfaces/drg/ISearchDataResponse';
@@ -42,6 +43,7 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
     "columns",
     window.localStorage.getItem('columns') || ''
   );
+  const [sheetIsMaking, setSheetIsMaking] = useState(false);
 
   const [searchColumn, setSearchColumn] = useState<string>('');
 
@@ -101,6 +103,8 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
   }
 
   const handleGenerateExcel = async () => {
+    setSheetIsMaking(true);
+
     if (data.length > 0) {
       const dataFiltredColumns: DataItem[] = [];
       const columnUnselected: string[] = [];
@@ -128,6 +132,8 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
 
       await generateExcel(translatedData, filter, user);
     }
+
+    setSheetIsMaking(false);
   }
 
   return (
@@ -212,6 +218,7 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
             <Button
               colorScheme="green"
               onClick={handleGenerateExcel}
+              isLoading={sheetIsMaking}
             >
               Gerar Planilha
             </Button>
