@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuth } from '@/commons/contexts/auth.context';
+import { translateMessage } from '@/commons/utils/text.utils';
 
 interface IFormInput {
   username: string;
@@ -27,11 +28,11 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  useEffect(() => console.log('errors', errors), [errors]);
+  useEffect(() => console.log('error', error), [error]);
 
   const handleLogin: SubmitHandler<IFormInput> = async (data) => {
     // if (data.username === 'admin') setError('username', { message: 'username is invalid', type: 'validate' })
-    
+
     await signIn(data);
     // navigate('/app')
   };
@@ -61,7 +62,8 @@ export default function Login() {
               <FormControl isInvalid={!!errors.username?.type}>
                 <FormLabel>Usuário</FormLabel>
                 <Input
-                   {...register("username", { required: true })}
+                  autoFocus
+                  {...register("username", { required: true })}
                 />
               </FormControl>
               <FormControl isInvalid={!!errors.password?.type}>
@@ -71,7 +73,7 @@ export default function Login() {
                   {...register("password", { required: true })}
                 />
               </FormControl>
-              <Stack spacing={10}>
+              <Stack spacing={5}>
                 <Stack
                   direction={{ base: 'column', sm: 'row' }}
                   align={'start'}
@@ -79,6 +81,9 @@ export default function Login() {
                   <Checkbox>Lembrar</Checkbox>
                   <Link color={'blue.400'}>Esqueceu a senha?</Link>
                 </Stack>
+
+                {error.message && <Text color={'red'} align={'center'}>{translateMessage(error.message)}</Text>}
+
                 <Button
                   type="submit"
                   bg={'blue.400'}

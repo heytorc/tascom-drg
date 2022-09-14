@@ -1,6 +1,8 @@
 import traverse from 'traverse';
 import _ from 'lodash';
 
+import MessagesConstants from '@/commons/constants/messages.constants';
+
 /**
  * 
  * @param docs 
@@ -86,4 +88,13 @@ const jsonToTable = (docs: any, options: any = {}) => {
   return tableData;
 };
 
-export { jsonToTable }
+const translateMessage = (constant: any) => {
+  const constFounded = Object.entries(MessagesConstants).find(([key, value]) => key === constant);
+  if (constFounded) {
+    return constFounded[1];
+  } else {
+    return constant;
+  }
+}
+
+export { jsonToTable, translateMessage }
