@@ -75,7 +75,11 @@ export const AuthProvider: FC<any> = ({ children }) => {
 
       navigate(lastPage);
     } catch (error: any) {
-      const { response: { data: { message = null } } } = error;
+      let message;
+
+      const { response: { data } } = error;
+      message = data?.message || error?.message || error.response.message;
+
       setError({ message });
     }
   };
