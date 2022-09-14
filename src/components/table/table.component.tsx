@@ -147,11 +147,12 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
           alignItems='center'
           justifyContent='center'
           textAlign='center'
-          height='100px'
+          height='120px'
+          borderRadius={8}
         >
           <AlertIcon boxSize='30px' mr={0} mb={3} />
           <AlertDescription maxWidth='sm'>
-            Informe um período para buscar os dados do DRG
+            Informe um período de até <Text as={'b'}>31 dias</Text> para buscar os dados na base do DRG
           </AlertDescription>
         </Alert>
       )}
