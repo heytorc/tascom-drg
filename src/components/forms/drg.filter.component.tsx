@@ -39,7 +39,7 @@ const DrgFilter: React.FC = () => {
     const initialDate = dayjs(data.initialDate);
     const finalDate = dayjs(data.finalDate);
 
-    if (finalDate.diff(initialDate) > 30) {
+    if (finalDate.diff(initialDate, 'days') > 31) {
       setError('initialDate', { message: 'MAX_PERIOD_FILTER_EXCEDED' })
       return false;
     } else return true
