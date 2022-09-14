@@ -54,6 +54,7 @@ export default function WithSubnavigation() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Text
+            as={'b'}
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}>
@@ -71,7 +72,7 @@ export default function WithSubnavigation() {
           direction={'row'}
           spacing={6}>
           
-          <Text>Olá, {user?.name}</Text>
+          <Text>Olá, <Text as={'b'}>{user?.name}</Text></Text>
           
           <Button
             fontSize={'sm'}
