@@ -13,14 +13,18 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
-  Stack
+  Stack,
+  Text
 } from '@chakra-ui/react';
 import InputMask from "react-input-mask";
+
+import dayjs from '@/commons/utils/date.utils';
 
 import { IFormFilterProps } from "@/commons/interfaces/drg/IFormFilterProps";
 
 import { useDrg } from '@/commons/contexts/drg.context';
 import { SearchIcon } from '@chakra-ui/icons';
+import { translateMessage } from '@/commons/utils/text.utils';
 
 const DrgFilter: React.FC = () => {
   const {
@@ -47,10 +51,25 @@ const DrgFilter: React.FC = () => {
     }
   };
 
+  const handleValidateFilter = (data: IFormFilterProps): boolean => {
+    const initialDate = dayjs(data.initialDate);
+    const finalDate = dayjs(data.finalDate);
+
+    if (finalDate.diff(initialDate) > 30) {
+      setError('initialDate', { message: 'MAX_PERIOD_FILTER_EXCEDED' })
+      return false;
+    } else if (!dateType) {
+      setError('dateType', { message: 'FILTER_DATETYPE_NOT_SELECTED' })
+      return false;
+    } else return true
+  }
+
   const handleSearch: SubmitHandler<IFormFilterProps> = async (data) => {
     const params = { ...data, dateType };
 
     console.log(params);
+
+    if (!handleValidateFilter(data)) return;
 
     await searchData(params)
   };
@@ -101,6 +120,7 @@ const DrgFilter: React.FC = () => {
                   </MenuOptionGroup>
                 </MenuList>
               </Menu>
+
             </Stack>
 
             <Button
@@ -113,6 +133,11 @@ const DrgFilter: React.FC = () => {
           </HStack>
 
         </form>
+
+        <Stack>
+          {errors.initialDate && <Text color={'red'} align={'center'}>{translateMessage(errors.initialDate.message)}</Text>}
+          {errors.dateType && <Text color={'red'} align={'center'}>{translateMessage(errors.dateType.message)}</Text>}
+        </Stack>
       </Box>
     </>
   );
