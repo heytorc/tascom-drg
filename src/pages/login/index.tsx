@@ -9,13 +9,15 @@ import {
   Stack,
   Link,
   Button,
-  Heading,
+  Image,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuth } from '@/commons/contexts/auth.context';
 import { translateMessage } from '@/commons/utils/text.utils';
+
+import TascomLogo from 'assets/logo-tascom-mini.png'
 
 interface IFormInput {
   username: string;
@@ -46,7 +48,7 @@ export default function Login() {
     >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Tascom</Heading>
+          <Image src={TascomLogo} w={250} />
           <Text fontSize={'lg'} color={'gray.600'}>
             Extração do DRG
           </Text>

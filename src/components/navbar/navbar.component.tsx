@@ -14,6 +14,7 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Image,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -22,6 +23,8 @@ import {
   ChevronRightIcon,
 } from '@chakra-ui/icons';
 import { useAuth } from '@/commons/contexts/auth.context';
+
+import TascomLogo from 'assets/logo-tascom-mini.png'
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
@@ -52,13 +55,15 @@ export default function WithSubnavigation() {
             aria-label={'Toggle Navigation'}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
+        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }} alignItems={'center'}>
+          <Image src={TascomLogo} w={150} mr={5} />
           <Text
             as={'b'}
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}>
-            Tascom DRG Extractor
+            color={useColorModeValue('gray.800', 'white')}
+            >
+            DRG EXTRACTOR
           </Text>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
