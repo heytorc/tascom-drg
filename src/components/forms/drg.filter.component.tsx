@@ -8,15 +8,10 @@ import {
   Heading,
   HStack,
   Input,
-  Menu,
-  MenuButton,
-  MenuItemOption,
-  MenuList,
-  MenuOptionGroup,
   Stack,
-  Text
+  Text,
+  Select
 } from '@chakra-ui/react';
-import InputMask from "react-input-mask";
 
 import dayjs from '@/commons/utils/date.utils';
 
@@ -40,17 +35,6 @@ const DrgFilter: React.FC = () => {
 
   const { searchData } = useDrg()
 
-  const [dateType, setDateType] = useState<string>('Alta');
-
-  const handleDateType = (value: string | string[]) => {
-    if (typeof value === 'string') {
-      value = value as "Alta" | "Internação" | "Cadastro" | "Cadastro da Alta";
-
-      register("dateType", { required: true })
-      setDateType(value);
-    }
-  };
-
   const handleValidateFilter = (data: IFormFilterProps): boolean => {
     const initialDate = dayjs(data.initialDate);
     const finalDate = dayjs(data.finalDate);
@@ -58,16 +42,11 @@ const DrgFilter: React.FC = () => {
     if (finalDate.diff(initialDate) > 30) {
       setError('initialDate', { message: 'MAX_PERIOD_FILTER_EXCEDED' })
       return false;
-    } else if (!dateType) {
-      setError('dateType', { message: 'FILTER_DATETYPE_NOT_SELECTED' })
-      return false;
     } else return true
   }
 
   const handleSearch: SubmitHandler<IFormFilterProps> = async (data) => {
-    const params = { ...data, dateType };
-
-    console.log(params);
+    const params = { ...data };
 
     if (!handleValidateFilter(data)) return;
 
@@ -84,8 +63,7 @@ const DrgFilter: React.FC = () => {
             <FormControl isInvalid={!!errors.initialDate?.type}>
               <FormLabel>Data Inicial</FormLabel>
               <Input
-                as={InputMask}
-                mask="99/99/9999"
+                type={'date'}
                 autoFocus
                 {...register("initialDate", { required: true, })}
               />
@@ -94,34 +72,23 @@ const DrgFilter: React.FC = () => {
             <FormControl isInvalid={!!errors.finalDate?.type}>
               <FormLabel>Data Final</FormLabel>
               <Input
-                as={InputMask}
-                mask="99/99/9999"
+                type={'date'}
                 {...register("finalDate", { required: true })}
               />
             </FormControl>
 
-            <Stack>
+            <FormControl isInvalid={!!errors.dateType?.type}>
               <FormLabel mb={0}>Selecione o tipo da data</FormLabel>
-              <Menu closeOnSelect>
-                <MenuButton as={Button} w={'15rem'}>
-                  {dateType ?? 'Nenhum tipo selecionado'}
-                </MenuButton>
-                <MenuList defaultValue={'Alta'}>
-                  <MenuOptionGroup
-                    defaultValue="asc"
-                    title="Tipo da data"
-                    type="radio"
-                    onChange={handleDateType}
-                  >
-                    <MenuItemOption isChecked={dateType === "Alta"} value="Alta" defaultChecked>Alta</MenuItemOption>
-                    <MenuItemOption isChecked={dateType === "Internação"} value="Internação">Internação</MenuItemOption>
-                    <MenuItemOption isChecked={dateType === "Cadastro"} value="Cadastro">Cadastro</MenuItemOption>
-                    <MenuItemOption isChecked={dateType === "Cadastro da Alta"} value="Cadastro da Alta">Cadastro da Alta</MenuItemOption>
-                  </MenuOptionGroup>
-                </MenuList>
-              </Menu>
-
-            </Stack>
+              <Select
+                defaultValue={'Alta'}
+                {...register("dateType", { required: 'FILTER_DATETYPE_NOT_SELECTED' })}
+              >
+                <option value="Alta">Alta</option>
+                <option value="Internação">Internação</option>
+                <option value="Cadastro">Cadastro</option>
+                <option value="Cadastro da Alta">Cadastro da Alta</option>
+              </Select>
+            </FormControl>
 
             <Button
               type="submit"
