@@ -2,6 +2,8 @@ import api from "@/commons/services/api";
 import { IUser } from "@/commons/contexts/auth.context";
 import { IFormFilterProps } from "../interfaces/drg/IFormFilterProps";
 
+import dayjs from '@/commons/utils/date.utils'
+
 interface IGenerateProps extends IFormFilterProps {
   total: number,
   data: any[],
@@ -12,6 +14,8 @@ interface IGenerateProps extends IFormFilterProps {
 
 const generateExcel = async (data: any[], filter: IFormFilterProps, user: IUser) => {
   if (!user?.id) return;
+
+  const filename = `exportacao-drg-${dayjs(new Date).unix()}.xlsx`;
 
   await api.post<any, any, IGenerateProps>('/report/create', {
     ...filter,
@@ -25,7 +29,7 @@ const generateExcel = async (data: any[], filter: IFormFilterProps, user: IUser)
   const url = window.URL.createObjectURL(new Blob([file]));
   const link = document.createElement('a');
   link.href = url;
-  link.setAttribute('download', 'file.xlsx'); //or any other extension
+  link.setAttribute('download', filename); //or any other extension
   document.body.appendChild(link);
   link.click();
   link.remove();
