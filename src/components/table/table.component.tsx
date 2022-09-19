@@ -129,8 +129,11 @@ const TableComponent: React.FC<ITableProps> = ({ data = [], total = 0 }) => {
       if (!user) return;
 
       const translatedData = normalizeJsonToExcel(dataFiltredColumns);
-
-      await generateExcel(translatedData, filter, user);
+      try {
+        await generateExcel(translatedData, filter, user);
+      } catch (e) {
+        setSheetIsMaking(false);
+      }
     }
 
     setSheetIsMaking(false);
